@@ -9,8 +9,6 @@
 
 const COOKIE_FILE = "/tmp/cookie_tea_subdomain.txt";
 
-$try = 0;
-
 if (!isset($argv[1])) {
   ex_err("Usage: ./".$argv[0]." <domain>");
 }
@@ -124,8 +122,10 @@ unset($postData[$ex]);
 $postData[$mmx[1].$o3[$mmx[2]].$mmx[3]] = $oldVal;
 $postData["jn"] = "JS aan, T aangeroepen, CSRF aangepast";
 
+$try = 0;
+
 retry:
-// Must wait 3 seconds to prevent CSRF error.
+
 sleep(3);
 
 $o = curl("https://subdomainfinder.c99.nl/",
@@ -157,9 +157,9 @@ $data = [];
 echo "[\n";
 foreach ($mmy[1] as $k => $v) {
   echo ($k ? "," : "")."\n  ".json_encode([
-    "r" => $v,
+    "cloudflare" => $mmy[3][$k],
     "ip" => $mmy[2][$k],
-    "cloudflare" => $mmy[3][$k]
+    "r" => $v
   ]);
 }
 echo "\n]\n";
