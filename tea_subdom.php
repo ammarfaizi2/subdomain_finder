@@ -141,6 +141,7 @@ if (!preg_match_all(
   $o, $mmy)) {
 
   if ($try < 3) {
+    $try++;
     goto retry;
   }
 
