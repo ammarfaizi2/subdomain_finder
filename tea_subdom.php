@@ -9,6 +9,8 @@
 
 const COOKIE_FILE = "/tmp/cookie_tea_subdomain.txt";
 
+$try = 0;
+
 if (!isset($argv[1])) {
   ex_err("Usage: ./".$argv[0]." <domain>");
 }
@@ -122,6 +124,7 @@ unset($postData[$ex]);
 $postData[$mmx[1].$o3[$mmx[2]].$mmx[3]] = $oldVal;
 $postData["jn"] = "JS aan, T aangeroepen, CSRF aangepast";
 
+retry:
 // Must wait 3 seconds to prevent CSRF error.
 sleep(3);
 
@@ -136,6 +139,11 @@ $o = curl("https://subdomainfinder.c99.nl/",
 if (!preg_match_all(
   "/<tr>.*?<td[^\\<\\>].+?checkStatus\\('(.+?)'.+?geoip.php\\?ip=(.+?)'.+?title='CloudFlare is (.+?)'/s",
   $o, $mmy)) {
+
+  if ($try < 3) {
+    goto retry;
+  }
+
   ex_err("Cannot get subdomain list!");
 }
 
